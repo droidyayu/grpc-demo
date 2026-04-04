@@ -1,4 +1,4 @@
-name: Docker — backend (grpc-backend)
+name: Docker — backend image (grpc-backend)
 
 on:
   push:
