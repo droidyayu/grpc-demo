@@ -1,6 +1,6 @@
-# gRPC Demo — Droidcon Talk Code
-**Talk:** gRPC in Apps: A Migration Story  
-**Speaker:** Ayushi Gupta — Engineering Lead, Zalando
+# gRPC Demo
+
+A multi-platform gRPC demo with Android, Flutter, Swift, and a Kotlin/Ktor backend. All platforms share a single `.proto` contract.
 
 ---
 
@@ -11,7 +11,7 @@
 | Java | 17+ | `brew install --cask temurin` |
 | Android Studio | Hedgehog+ | [developer.android.com](https://developer.android.com/studio) |
 | Android Emulator | API 26+ | Via Android Studio SDK Manager |
-| grpcurl *(optional, for live demo)* | any | `brew install grpcurl` |
+| grpcurl *(optional)* | any | `brew install grpcurl` |
 
 > **No Docker needed.** The backend runs directly via the Gradle wrapper.
 
@@ -22,34 +22,42 @@
 ```
 grpc-demo/
 ├── proto/
-│   └── product_catalog.proto        ← ⭐ Single source of truth for ALL platforms
+│   └── product_catalog.proto        ← single source of truth for all platforms
 │
-├── backend/                         ← Kotlin/Ktor server  (gRPC :50051 + REST :8080)
+├── backend/                         ← Kotlin/Ktor server (gRPC :50051 + REST :8080)
 │   └── src/main/kotlin/com/demo/grpc/
-│       ├── Application.kt               ← Starts both servers side-by-side
-│       ├── service/CatalogServiceImpl.kt ← ⭐ SHOW THIS LIVE
+│       ├── Application.kt
+│       ├── service/CatalogServiceImpl.kt
 │       └── model/ProductRepository.kt
 │
 ├── android/                         ← Kotlin + Jetpack Compose + Hilt
 │   └── app/src/main/kotlin/com/demo/grpcdemo/
-│       ├── domain/                      ← Pure Kotlin, no framework
+│       ├── domain/                      ← pure Kotlin, no framework deps
 │       │   ├── model/                   ← Product, PriceUpdate
 │       │   ├── exception/               ← CatalogException
 │       │   ├── repository/              ← CatalogRepository (interface)
 │       │   └── usecase/                 ← ListProducts, GetProduct, WatchPrice
 │       ├── data/                        ← gRPC transport + proto↔domain mapping
 │       │   ├── GrpcCatalogDataSource.kt
-│       │   ├── CatalogRepositoryImpl.kt ← ⭐ SHOW THIS LIVE
-│       │   └── comparison/
-│       │       └── ComparisonDataSource.kt ← REST vs gRPC byte metrics
-│       ├── di/                          ← Hilt modules (AppModule, RepositoryModule)
-│       └── ui/
-│           ├── CatalogScreen.kt         ← Product list + live price ticker
-│           └── comparison/
-│               └── ComparisonScreen.kt  ← ⭐ REST vs gRPC demo screen
+│       │   ├── CatalogRepository.kt
+│       │   └── comparison/ComparisonDataSource.kt
+│       ├── di/                          ← Hilt modules
+│       └── ui/                          ← ViewModel + Compose screens
 │
-├── flutter/                         ← Dart + Riverpod (mirrors Android architecture)
-└── swift/                           ← Swift + SwiftUI + grpc-swift (iOS 17+)
+├── flutter/                         ← Dart + Riverpod
+│   └── lib/
+│       ├── domain/
+│       ├── data/catalog_repository_impl.dart
+│       ├── di/providers.dart
+│       └── ui/
+│
+├── swift/                           ← Swift + SwiftUI + grpc-swift (iOS 17+)
+│   └── Sources/GrpcDemo/
+│       ├── Domain/
+│       ├── Data/CatalogRepository.swift
+│       └── UI/
+│
+└── docker-compose.yml
 ```
 
 ---
