@@ -1,0 +1,18 @@
+// lib/generated/README.md — placeholder
+//
+// Run the following command from the repo root to generate Dart stubs:
+//
+//   dart pub global activate protoc_plugin
+//
+//   protoc \
+//     --dart_out=grpc:flutter/lib/generated \
+//     -I proto \
+//     proto/product_catalog.proto
+//
+// This produces:
+//   lib/generated/product_catalog.pb.dart        ← message classes
+//   lib/generated/product_catalog.pbenum.dart    ← enums
+//   lib/generated/product_catalog.pbgrpc.dart    ← CatalogServiceClient stub
+//   lib/generated/product_catalog.pbjson.dart    ← JSON helpers
+
+// ignore_for_file: unused_import

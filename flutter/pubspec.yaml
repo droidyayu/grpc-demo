@@ -1,0 +1,33 @@
+name: grpc_demo
+description: "Flutter gRPC demo — mirrors the Android architecture using the same .proto"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # gRPC + protobuf runtime
+  grpc: ^4.0.1
+  protobuf: ^3.1.0
+
+  # State management (mirrors Android StateFlow + ViewModel)
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.9
+  riverpod_generator: ^2.4.0
+
+  # Proto code generation:
+  #   dart pub global activate protoc_plugin
+  #   protoc --dart_out=grpc:lib/generated -I../proto ../proto/product_catalog.proto
+flutter:
+  uses-material-design: true

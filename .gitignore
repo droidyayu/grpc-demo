@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+**/build/
+*.class
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Android
+android/local.properties
+android/**/*.apk
+android/**/*.aab
+android/app/release/
+
+# Flutter
+flutter/.dart_tool/
+flutter/.flutter-plugins
+flutter/.flutter-plugins-dependencies
+flutter/.packages
+flutter/pubspec.lock
+flutter/build/
+
+# Swift / Xcode
+swift/.build/
+swift/*.xcodeproj/
+*.xcuserstate
+DerivedData/
+
+# Logs
+*.log
+/tmp/
+
+# Generated protobuf sources (regenerated at build time)
+android/app/build/
+backend/bin/
