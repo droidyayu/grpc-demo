@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: .          # repo root — so both proto/ and backend/ are in scope
-      dockerfile: backend/Dockerfile
+      dockerfile: Dockerfile
     image: grpc-demo-backend:latest
     container_name: grpc-demo-backend
     restart: unless-stopped
