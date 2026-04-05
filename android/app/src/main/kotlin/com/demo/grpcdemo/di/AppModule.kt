@@ -20,9 +20,8 @@ object AppModule {
     fun provideManagedChannel(): ManagedChannel {
         val builder = ManagedChannelBuilder
             .forAddress(BuildConfig.GRPC_HOST, BuildConfig.GRPC_PORT)
-        // Use plaintext for debug builds; TLS for release
-        if (BuildConfig.DEBUG) builder.usePlaintext()
-        else builder.useTransportSecurity()
+        if (BuildConfig.GRPC_USE_TLS) builder.useTransportSecurity()
+        else builder.usePlaintext()
         return builder.build()
     }
 

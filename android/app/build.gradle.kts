@@ -30,9 +30,11 @@ android {
         //   2. ngrok tcp 50051          → copy host:port  e.g. 0.tcp.ngrok.io:12345
         //   3. ngrok http 8080          → copy https URL  e.g. https://abc123.ngrok-free.app
         //   4. Fill in the values below and rebuild
-        buildConfigField("String", "GRPC_HOST",     "\"10.0.2.2\"")            // ← Emulator host (maps to your Mac's localhost)
-        buildConfigField("int",    "GRPC_PORT",     "50051")
-        buildConfigField("String", "REST_BASE_URL", "\"http://10.0.2.2:8080\"")
+        buildConfigField("String",  "GRPC_HOST",    "\"grpc-demo.fly.dev\"")
+        buildConfigField("int",     "GRPC_PORT",    "50051")
+        buildConfigField("String",  "REST_BASE_URL","\"https://grpc-demo.fly.dev\"")
+        buildConfigField("Boolean", "GRPC_USE_TLS", "true")
+        buildConfigField("Boolean", "GRPC_ENABLED", "true")
     }
 
     compileOptions {
