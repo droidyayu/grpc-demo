@@ -5,10 +5,13 @@ primary_region = "fra"
   dockerfile = "Dockerfile"
 
 [env]
-  JAVA_OPTS = "-Xmx200m"
+  JAVA_OPTS = "-Xmx160m"
 
 [[vm]]
   size = "shared-cpu-1x"
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "256mb"
 
 [http_service]
   internal_port = 8080
