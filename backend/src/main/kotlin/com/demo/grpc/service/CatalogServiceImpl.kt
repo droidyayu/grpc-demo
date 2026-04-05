@@ -53,17 +53,15 @@ class CatalogServiceImpl : CatalogServiceGrpcKt.CatalogServiceCoroutineImplBase(
     }
 
     // ── Server-streaming RPC: live price ticker ───────────────
-    // Great slide moment — show this to explain why streaming
-    // beats polling REST.
     override fun watchPrice(request: WatchPriceRequest): Flow<PriceUpdate> = flow {
         val product = ProductRepository.findById(request.productId)
             ?: throw StatusException(
                 Status.NOT_FOUND.withDescription("Product ${request.productId} not found")
             )
 
-        // Simulate price fluctuation every 2 seconds
+        // Stream indefinitely until the client cancels
         var currentPrice = product.pricePaise
-        repeat(20) {
+        while (true) {
             currentPrice += (-500..500L).random()   // ±5 rupee swing
             emit(priceUpdate {
                 productId  = request.productId

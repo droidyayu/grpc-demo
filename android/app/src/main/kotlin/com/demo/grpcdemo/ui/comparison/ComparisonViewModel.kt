@@ -114,7 +114,14 @@ class ComparisonViewModel @Inject constructor(
             // gRPC streaming coroutine
             launch {
                 dataSource.streamPriceViaGrpc(productId)
-                    .catch { /* stop silently on error */ }
+                    .catch { e ->
+                        _live.update { state ->
+                            state.copy(grpc = state.grpc.copy(
+                                isRunning = false,
+                                error     = e.message ?: "gRPC error",
+                            ))
+                        }
+                    }
                     .collect { frame ->
                         _live.update { state ->
                             state.copy(grpc = LiveSideState(
@@ -126,6 +133,8 @@ class ComparisonViewModel @Inject constructor(
                             ))
                         }
                     }
+                // Stream completed normally (backend finished 20 updates)
+                _live.update { it.copy(grpc = it.grpc.copy(isRunning = false)) }
             }
         }
     }
