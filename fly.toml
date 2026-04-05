@@ -1,0 +1,26 @@
+app = "grpc-demo"
+primary_region = "fra"
+
+[build]
+  dockerfile = "backend/Dockerfile"
+
+[env]
+  JAVA_OPTS = "-Xmx200m"
+
+[[vm]]
+  size = "shared-cpu-1x"
+
+[http_service]
+  internal_port = 8080
+
+[[services]]
+  internal_port = 50051
+  protocol = "tcp"
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 50051
+    tls_options = { alpn = ["h2"] }
+
+  [services.ports.http_options]
+    h2_backend = true
