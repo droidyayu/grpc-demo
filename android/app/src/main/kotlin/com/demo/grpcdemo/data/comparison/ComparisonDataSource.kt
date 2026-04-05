@@ -116,8 +116,6 @@ class ComparisonDataSource @Inject constructor(
     }
 
     // ── Live REST: poll /price every 2 seconds ────────────────
-    // Emits one LivePriceFrame per HTTP round-trip.
-    // Each poll is a brand-new connection — TCP + HTTP headers every time.
     fun pollPriceViaRest(productId: String): Flow<LivePriceFrame> = flow {
         var cumulative = 0
         var count = 0
@@ -125,20 +123,27 @@ class ComparisonDataSource @Inject constructor(
             val (pricePaise, bodyBytes) = withContext(Dispatchers.IO) {
                 val conn = URL("$restBaseUrl/api/v1/products/$productId/price")
                     .openConnection() as HttpURLConnection
-                conn.connectTimeout = 3_000
-                conn.readTimeout    = 3_000
+                conn.connectTimeout = 5_000
+                conn.readTimeout    = 5_000
                 conn.setRequestProperty("ngrok-skip-browser-warning", "true")
-                val body = conn.inputStream.readBytes()
+                val responseCode = conn.responseCode
+                val body = if (responseCode in 200..299) {
+                    conn.inputStream.readBytes()
+                } else {
+                    val err = conn.errorStream?.readBytes()
+                    conn.disconnect()
+                    throw Exception("REST $responseCode: ${err?.decodeToString()?.take(120)}")
+                }
                 conn.disconnect()
                 val price = runCatching {
                     JSONObject(String(body)).getLong("pricePaise")
-                }.getOrDefault(0L)
+                }.getOrElse { throw Exception("REST parse error: ${it.message}") }
                 Pair(price, body.size)
             }
             cumulative += bodyBytes
             count++
             emit(LivePriceFrame(pricePaise, bodyBytes, cumulative, count))
-            delay(2_000) // simulate realistic polling interval
+            delay(2_000)
         }
     }
 

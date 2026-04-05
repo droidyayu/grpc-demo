@@ -34,6 +34,7 @@ data class LiveSideState(
     val cumulativeBytes: Int = 0,
     val updateCount: Int = 0,
     val isRunning: Boolean = false,
+    val error: String? = null,
 )
 
 data class LiveComparisonState(
@@ -90,7 +91,14 @@ class ComparisonViewModel @Inject constructor(
             // REST polling coroutine
             launch {
                 dataSource.pollPriceViaRest(productId)
-                    .catch { /* stop silently on error */ }
+                    .catch { e ->
+                        _live.update { state ->
+                            state.copy(rest = state.rest.copy(
+                                isRunning = false,
+                                error     = e.message ?: "REST error",
+                            ))
+                        }
+                    }
                     .collect { frame ->
                         _live.update { state ->
                             state.copy(rest = LiveSideState(

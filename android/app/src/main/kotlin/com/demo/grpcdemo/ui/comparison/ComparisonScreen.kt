@@ -273,6 +273,16 @@ fun LiveSidePanel(
         MetricLine("Updates",   "${side.updateCount}")
         MetricLine("Per frame", if (side.lastFrameBytes > 0) formatBytes(side.lastFrameBytes) else "—")
         MetricLine("Total",     if (side.cumulativeBytes > 0) formatBytes(side.cumulativeBytes) else "—")
+
+        if (side.error != null) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text      = side.error,
+                fontSize  = 9.sp,
+                color     = Color(0xFFFF5252),
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
